@@ -34,4 +34,3 @@ Describe what you've deployed and how:
  - Operating system: [e.g. macos, linux]
  - Installation source: [e.g. PyPI, conda, from source, official container image, custom container image]
  - Deployment type: [e.g. local installation, Docker, Kubernetes, Kubeflow [notebook server] , Open Data Hub]
-

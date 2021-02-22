@@ -2,7 +2,8 @@
 name: Pipeline issue report
 about: Report a potential issue related to the pipeline editor or pipeline execution
 title: ''
-labels: component:pipeline-editor, component:pipeline-runtime, status:Needs Triage, kind:user-feedback
+labels: component:pipeline-editor, component:pipeline-runtime, kind:user-feedback,
+  status:Needs Triage
 assignees: ''
 
 ---
@@ -42,4 +43,4 @@ If the issue is related to pipeline execution, identify the environment where th
  - Apache Airflow (provide version number)
  
 **Runtime configuration settings**
-If the issue is related to pipeline execution, document the runtime configuration settings from the Elyra UI, omitting confidential information. 
+If the issue is related to pipeline execution, document the runtime configuration settings from the Elyra UI, omitting confidential information.
