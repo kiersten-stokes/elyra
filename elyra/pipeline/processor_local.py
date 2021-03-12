@@ -76,7 +76,7 @@ class LocalPipelineProcessor(PipelineProcessor):
                                        operation_name=operation.name,
                                        duration=(time.time() - t0))
             except Exception as ex:
-                raise RuntimeError(f'Error processing operation {operation.name}: {str(ex)}.') from ex
+                raise ex  # RuntimeError(f'Error processing operation {operation.name}: {str(ex)}.') from ex
 
         self.log_pipeline_info(pipeline.name, "pipeline processed", duration=(time.time() - t0_all))
 
@@ -205,8 +205,12 @@ class NotebookOperationProcessor(FileOperationProcessor):
                 filepath,
                 **additional_kwargs
             )
+        except papermill.PapermillExecutionError as pee:
+            self.log.error(pee)
+            raise RuntimeError(f'Internal error executing {file_name}: {pee.evalue}') from pee
         except Exception as ex:
-            raise RuntimeError(f'Internal error executing {filepath}: {ex}') from ex
+            self.log.error(ex)
+            raise RuntimeError(f'Internal error executing {file_name}') from ex
 
         t1 = time.time()
         duration = (t1 - t0)
@@ -235,9 +239,11 @@ class PythonScriptOperationProcessor(FileOperationProcessor):
         try:
             run(argv, cwd=file_dir, env=envs, check=True, stderr=PIPE)
         except CalledProcessError as cpe:
-            raise RuntimeError(f'Internal error executing: {cpe.stderr.decode()}') from cpe
+            self.log.error(cpe.stderr.decode())
+            raise RuntimeError(f'Internal error executing: {file_name}') from cpe
         except Exception as ex:
-            raise RuntimeError(f'Internal error executing {filepath}: {ex}') from ex
+            self.log.error(ex)
+            raise RuntimeError(f'Internal error executing {file_name}') from ex
 
         t1 = time.time()
         duration = (t1 - t0)
