@@ -242,13 +242,13 @@ class FilesystemComponentReader(ComponentReader):
     """
     _type = 'filename'
 
-    def read_component_definition(self, component_id: str, location: str) -> str:
-        component_location = os.path.join(os.path.dirname(__file__), location)
-        if not os.path.exists(component_location):
-            self.log.error(f'Invalid location for component_id {component_id}: {component_location}')
-            raise FileNotFoundError(f'Invalid location for component_id {component_id}: {component_location}')
+    def read_component_definition(self, registry_entry: dict) -> str:
+        if not os.path.exists(registry_entry.location):
+            self.log.error(f'Invalid location for component_id {registry_entry.id}: {registry_entry.location}')
+            raise FileNotFoundError(f'Invalid location for component_id {registry_entry.id}: \
+                                    {registry_entry.location}')
 
-        with open(component_location, 'r') as f:
+        with open(registry_entry.location, 'r') as f:
             return f.read()
 
 
@@ -258,11 +258,12 @@ class UrlComponentReader(ComponentReader):
     """
     _type = 'url'
 
-    def read_component_definition(self, component_id: str, location: str) -> str:
-        res = requests.get(location)
+    def read_component_definition(self, registry_entry: dict) -> str:
+        res = requests.get(registry_entry.location)
         if res.status_code != HTTPStatus.OK:
-            self.log.error(f'Invalid location for component_id {component_id}: {location}')
-            raise FileNotFoundError(f'Invalid location for component_id {component_id}: {location}')
+            self.log.error(f'Invalid location for component_id {registry_entry.id}: {registry_entry.location}')
+            raise FileNotFoundError(f'Invalid location for component_id {registry_entry.id}: \
+                                    {registry_entry.location}.')
 
         return res.text
 
