@@ -242,4 +242,4 @@ class PipelineParser(LoggingConfigurable):
         property in the Operation object. These parameters will be used by the appropriate processor when
         loading and running a component that is not one of the standard notebook or script operations.
         """
-        return json.loads(PipelineParser._get_app_data_field(node, "component_parameters", {}))
+        return PipelineParser._get_app_data_field(node, "component_parameters", {})
