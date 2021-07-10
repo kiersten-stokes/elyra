@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import json
 from typing import Any
 from typing import Dict
 from typing import List
@@ -223,17 +222,6 @@ class PipelineParser(LoggingConfigurable):
                 else:
                     links.extend(PipelineParser._get_input_node_ids(node_input))
         return links
-
-    @staticmethod
-    def _scrub_list(dirty: Optional[List[Optional[str]]]) -> List[str]:
-        """
-        Clean an existing list by filtering out None and empty string values
-        :param dirty: a List of values
-        :return: a clean list without None or empty string values
-        """
-        if not dirty:
-            return []
-        return [clean for clean in dirty if clean]
 
     @staticmethod
     def _get_component_params(node: Dict) -> Dict:
