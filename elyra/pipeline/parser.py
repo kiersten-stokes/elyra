@@ -154,7 +154,7 @@ class PipelineParser(LoggingConfigurable):
             classifier=node.get('op'),
             name=PipelineParser._get_app_data_field(node, 'label'),  # Consider adding a default value here
             parent_operation_ids=parent_operations,
-            component_params=PipelineParser._get_component_params(node))
+            component_params=PipelineParser._get_app_data_field(node, "component_parameters", {}))
 
     @staticmethod
     def _get_child_field(obj: Dict, child: str, field_name: str, default_value: Any = None) -> Any:
@@ -223,12 +223,3 @@ class PipelineParser(LoggingConfigurable):
                 else:
                     links.extend(PipelineParser._get_input_node_ids(node_input))
         return links
-
-    @staticmethod
-    def _get_component_params(node: Dict) -> Dict:
-        """
-        Builds a dictionary of the parameters for a given node that do not have a corresponding
-        property in the Operation object. These parameters will be used by the appropriate processor when
-        loading and running a component that is not one of the standard notebook or script operations.
-        """
-        return PipelineParser._get_app_data_field(node, "component_parameters", {})
